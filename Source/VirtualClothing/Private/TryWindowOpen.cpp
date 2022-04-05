@@ -3,7 +3,7 @@
 #include "Misc/Paths.h"
 #include "HAL/FileManager.h"
 #include "TextureActor.h"
-
+#include "Components/InputComponent.h"
 #include "TryWindowOpen.h"
 
 // Sets default values
@@ -33,6 +33,34 @@ void ATryWindowOpen::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATryWindowOpen::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ATryWindowOpen::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ATryWindowOpen::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &ATryWindowOpen::LookRight);
+
+}
+
+
+
+void ATryWindowOpen::MoveForward(float AxisValue)
+{
+	AddMovementInput(GetActorForwardVector() * AxisValue);
+}
+
+void ATryWindowOpen::LookUp(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue);
+}
+
+void ATryWindowOpen::MoveRight(float AxisValue)
+{
+	AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void ATryWindowOpen::LookRight(float AxisValue)
+{
+	AddControllerYawInput(AxisValue);
 }
 
 void ATryWindowOpen::OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& FileTypes, TArray<FString>& OutFileNames, FString& OutFilePath)
